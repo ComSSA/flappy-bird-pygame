@@ -22,4 +22,5 @@ def load_audios():
 
 
 def play_audio(name):
-    audios[name].play()
+    #audios[name].play()
+    pass
