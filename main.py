@@ -14,7 +14,7 @@ pygame.init()
 
 screen = pygame.display.set_mode((configs.SCREEN_WIDTH, configs.SCREEN_HEIGHT))
 
-pygame.display.set_caption("Flappy Bird Game v1.0.2")
+pygame.display.set_caption("Flappy Bird Game v1.1 COMSSA Edition")
 
 img = pygame.image.load('assets/icons/red_bird.png')
 pygame.display.set_icon(img)
@@ -22,9 +22,13 @@ pygame.display.set_icon(img)
 
 clock = pygame.time.Clock()
 column_create_event = pygame.USEREVENT
+death_timer_event = pygame.USEREVENT + 1
+
 running = True
 gameover = False
 gamestarted = False
+
+gameDeathWait = False
 
 assets.load_sprites()
 assets.load_audios()
@@ -49,6 +53,8 @@ while running:
             running = False
         if event.type == column_create_event:
             Column(sprites)
+        if event.type == death_timer_event:
+            gameDeathWait = False
 
         if not gameover:
             bird.handle_event(event)
@@ -59,7 +65,7 @@ while running:
                 gamestarted = True
                 game_start_message.kill()
                 pygame.time.set_timer(column_create_event, 1500)
-            if gameover:
+            if gameover and not gameDeathWait:
                 gameover = False
                 gamestarted = False
                 sprites.empty()
@@ -78,6 +84,9 @@ while running:
         GameOverMessage(sprites)
         pygame.time.set_timer(column_create_event, 0)
         assets.play_audio("hit")
+        gameDeathWait = True
+        print("Game ended with score of:", score.value)
+        pygame.time.set_timer(death_timer_event, 1000) # 1 second wait before allowed to replay game
 
     for sprite in sprites:
         if type(sprite) is Column and sprite.is_passed():
