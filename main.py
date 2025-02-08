@@ -8,6 +8,7 @@ from objects.column import Column
 from objects.floor import Floor
 from objects.gameover_message import GameOverMessage
 from objects.gamestart_message import GameStartMessage
+from objects.leaderboard import Leaderboard
 from objects.score import Score
 
 pygame.init()
@@ -25,6 +26,8 @@ column_create_event = pygame.USEREVENT
 running = True
 gameover = False
 gamestarted = False
+show_leaderboard = False
+leaderboard = Leaderboard()
 
 assets.load_sprites()
 assets.load_audios()
@@ -60,10 +63,14 @@ while running:
                 game_start_message.kill()
                 pygame.time.set_timer(column_create_event, 1500)
             if gameover:
-                gameover = False
-                gamestarted = False
-                sprites.empty()
-                bird, game_start_message, score = create_sprites()
+                if leaderboard.is_active:
+                    leaderboard.draw_leaderboard(screen, score.value)
+                else:
+                    gameover = False
+                    gamestarted = False
+                    sprites.empty()
+                    bird, game_start_message, score = create_sprites()
+                    leaderboard.is_active = True
 
     screen.fill(0)
 
