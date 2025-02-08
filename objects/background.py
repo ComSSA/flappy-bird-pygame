@@ -9,12 +9,12 @@ class Background(pygame.sprite.Sprite):
     def __init__(self, index, *groups):
         self._layer = Layer.BACKGROUND
         self.image = assets.get_sprite("background")
-        self.rect = self.image.get_rect(topleft=(configs.SCREEN_WIDTH * index, 0))
+        self.rect = self.image.get_rect(topleft=(configs.GAME_WIDTH * index + configs.getGameArea().left, configs.getGameArea().top))
 
         super().__init__(*groups)
 
     def update(self):
         self.rect.x -= 1
 
-        if self.rect.right <= 0:
-            self.rect.x = configs.SCREEN_WIDTH
+        if self.rect.right <= configs.getGameArea().left:
+            self.rect.x = configs.getGameArea().right

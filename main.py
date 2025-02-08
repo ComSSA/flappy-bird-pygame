@@ -12,7 +12,9 @@ from objects.score import Score
 
 pygame.init()
 
-screen = pygame.display.set_mode((configs.SCREEN_WIDTH, configs.SCREEN_HEIGHT))
+infoSize = pygame.display.Info()
+screen = pygame.display.set_mode((infoSize.current_w, infoSize.current_h), pygame.RESIZABLE)
+
 
 pygame.display.set_caption("Flappy Bird Game v1.0.2")
 
@@ -37,9 +39,7 @@ def create_sprites():
     Background(1, sprites)
     Floor(0, sprites)
     Floor(1, sprites)
-
     return Bird(sprites), GameStartMessage(sprites), Score(sprites)
-
 
 bird, game_start_message, score = create_sprites()
 
@@ -49,6 +49,13 @@ while running:
             running = False
         if event.type == column_create_event:
             Column(sprites)
+        if event.type == pygame.VIDEORESIZE: # Resize event
+            width, height = event.size
+            if width < configs.GAME_WIDTH:
+                width = configs.GAME_WIDTH
+            if height < configs.GAME_HEIGHT:
+                height = configs.GAME_HEIGHT
+            screen = pygame.display.set_mode((width,height), pygame.RESIZABLE)
 
         if not gameover:
             bird.handle_event(event)
@@ -65,7 +72,7 @@ while running:
                 sprites.empty()
                 bird, game_start_message, score = create_sprites()
 
-    screen.fill(0)
+    screen.fill(pygame.Color(68,89,165))
 
     sprites.draw(screen)
 
@@ -83,6 +90,13 @@ while running:
         if type(sprite) is Column and sprite.is_passed():
             score.value += 1
             assets.play_audio("point")
+
+    # Draw mask
+    pygame.draw.rect(screen, pygame.Color(68,89,165), pygame.Rect(0,0, configs.getGameArea().left, configs.getGameArea().centery * 2))
+    pygame.draw.rect(screen, pygame.Color(68,89,165), pygame.Rect(configs.getGameArea().left,0, configs.getGameArea().width, configs.getGameArea().top))
+    pygame.draw.rect(screen, pygame.Color(68,89,165), pygame.Rect(configs.getGameArea().right,0, configs.getGameArea().left, configs.getGameArea().centery * 2))
+    pygame.draw.rect(screen, pygame.Color(68,89,165), pygame.Rect(configs.getGameArea().left,configs.getGameArea().bottom, configs.getGameArea().width, configs.getGameArea().top))
+
 
     pygame.display.flip()
     clock.tick(configs.FPS)
