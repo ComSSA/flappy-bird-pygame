@@ -18,7 +18,7 @@ class Bird(pygame.sprite.Sprite):
         ]
 
         self.image = self.images[0]
-        self.rect = self.image.get_rect(topleft=(-50, 50))
+        self.rect = self.image.get_rect(topleft=(configs.getGameArea().left+50, configs.getGameArea().top+50))
 
         self.mask = pygame.mask.from_surface(self.image)
 
@@ -33,7 +33,7 @@ class Bird(pygame.sprite.Sprite):
         self.flap += configs.GRAVITY
         self.rect.y += self.flap
 
-        if self.rect.x < 50:
+        if self.rect.x < configs.getGameArea().left+50: # Why is this here?
             self.rect.x += 3
 
     def handle_event(self, event):
@@ -46,6 +46,6 @@ class Bird(pygame.sprite.Sprite):
         for sprite in sprites:
             if ((type(sprite) is Column or type(sprite) is Floor) and sprite.mask.overlap(self.mask, (
                     self.rect.x - sprite.rect.x, self.rect.y - sprite.rect.y)) or
-                    self.rect.bottom < 0):
+                    self.rect.bottom < configs.getGameArea().top):
                 return True
         return False
