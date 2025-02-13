@@ -28,7 +28,7 @@ class Score(pygame.sprite.Sprite):
 
         self.height = self.images[0].get_height()
         self.image = pygame.surface.Surface((self.width, self.height), pygame.SRCALPHA)
-        self.rect = self.image.get_rect(center=(configs.SCREEN_WIDTH / 2, 50))
+        self.rect = self.image.get_rect(center=(configs.getGameArea().centerx, configs.getGameArea().top + 50))
 
         x = 0
         for img in self.images:
