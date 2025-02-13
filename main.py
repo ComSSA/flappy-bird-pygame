@@ -62,7 +62,7 @@ while running:
                 width = configs.GAME_WIDTH
             if height < configs.GAME_HEIGHT:
                 height = configs.GAME_HEIGHT
-            screen = pygame.display.set_mode((width,height), pygame.RESIZABLE)
+            # screen = pygame.display.set_mode((width,height), pygame.RESIZABLE)
         if event.type == death_timer_event:
             gameDeathWait = False
 

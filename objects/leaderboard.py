@@ -1,3 +1,4 @@
+import time
 import pygame
 import pygame_menu
 
@@ -33,13 +34,23 @@ class Leaderboard:
             return []
 
     def draw_leaderboard(self, surface, score):
-        menu = pygame_menu.Menu("Leaderboard", 200, 300, theme=pygame_menu.themes.THEME_BLUE)
+        screen_width, screen_height = pygame.display.get_surface().get_size()
+
+        menu = pygame_menu.Menu("Leaderboard", screen_width * 0.7, screen_height * 0.5, theme=pygame_menu.themes.THEME_BLUE)
         user_info = UserInfo()
-        menu.add.text_input("Student ID", default="", onchange=user_info.set_student_id)
-        menu.add.text_input("Discord ID", default="", onchange=user_info.set_discord_id)
+        menu.add.label("Enter your Student/Staff ID")
+        menu.add.text_input("", onchange=user_info.set_student_id, input_underline_len=20, maxchar=20)
+        
+        menu.add.label("Enter your Discord ID/Tag")
+        menu.add.text_input("", onchange=user_info.set_discord_id, input_underline_len=20, maxchar=20)
+
+        menu.add.vertical_margin(20)
+
         menu.add.button("Exit", lambda: self._exit_menu(user_info, score))
+        
         while self.is_active:
-            menu.mainloop(surface, disable_loop=True)
+            # Add ComSSA color background with surface.fill
+            menu.mainloop(surface, disable_loop=True, bgfun=lambda: surface.fill((68,89,165)))
             pygame.display.flip()
 
     def _exit_menu(self, user_info, score):
