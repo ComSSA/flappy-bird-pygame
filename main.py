@@ -51,10 +51,10 @@ def create_sprites():
 
 bird, game_start_message, score = create_sprites()
 
-control_text = GameText("Controls", 36, (300, configs.getGameArea().centery - 80))
-space_text = GameText("Space or Left Click to Start", 30, (300, configs.getGameArea().centery))
-leaderboard_text = GameText("Press L for Leaderboard", 30, (300, configs.getGameArea().centery + 50))
-good_luck_text = GameText("Good Luck! ^_^", 34, (300, configs.getGameArea().centery + 110))
+control_text = GameText("Controls", 36, (configs.getGameArea().left / 2, configs.getGameArea().centery - 80))
+space_text = GameText("Space or Left Click to Start", 30, (configs.getGameArea().left / 2, configs.getGameArea().centery))
+leaderboard_text = GameText("Press L for Leaderboard", 30, (configs.getGameArea().left / 2, configs.getGameArea().centery + 50))
+good_luck_text = GameText("Good Luck! ^_^", 34, (configs.getGameArea().left / 2, configs.getGameArea().centery + 110))
 
 while running:
     for event in pygame.event.get():
@@ -94,7 +94,7 @@ while running:
                 if not leaderboard.is_active:
                     leaderboard.draw_leaderboard(screen)
 
-    screen.fill(pygame.Color(68,89,165))
+    screen.fill(configs.COMSSA_COLOR)
 
     sprites.draw(screen)
 
@@ -117,15 +117,16 @@ while running:
             assets.play_audio("point")
 
     # Draw mask
-    pygame.draw.rect(screen, pygame.Color(68,89,165), pygame.Rect(0,0, configs.getGameArea().left, configs.getGameArea().centery * 2))
-    pygame.draw.rect(screen, pygame.Color(68,89,165), pygame.Rect(configs.getGameArea().left,0, configs.getGameArea().width, configs.getGameArea().top))
-    pygame.draw.rect(screen, pygame.Color(68,89,165), pygame.Rect(configs.getGameArea().right,0, configs.getGameArea().left, configs.getGameArea().centery * 2))
-    pygame.draw.rect(screen, pygame.Color(68,89,165), pygame.Rect(configs.getGameArea().left,configs.getGameArea().bottom, configs.getGameArea().width, configs.getGameArea().top))
+    pygame.draw.rect(screen, configs.COMSSA_COLOR, pygame.Rect(0,0, configs.getGameArea().left, configs.getGameArea().centery * 2))
+    pygame.draw.rect(screen, configs.COMSSA_COLOR, pygame.Rect(configs.getGameArea().left,0, configs.getGameArea().width, configs.getGameArea().top))
+    pygame.draw.rect(screen, configs.COMSSA_COLOR, pygame.Rect(configs.getGameArea().right,0, configs.getGameArea().left, configs.getGameArea().centery * 2))
+    pygame.draw.rect(screen, configs.COMSSA_COLOR, pygame.Rect(configs.getGameArea().left,configs.getGameArea().bottom, configs.getGameArea().width, configs.getGameArea().top))
 
     control_text.draw(screen)
     space_text.draw(screen)
     leaderboard_text.draw(screen)
     good_luck_text.draw(screen)
+
     pygame.display.flip()
     clock.tick(configs.FPS)
 

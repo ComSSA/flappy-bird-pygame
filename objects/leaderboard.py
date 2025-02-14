@@ -2,7 +2,7 @@ import time
 import pygame
 import pygame_menu
 
-from objects.constants import COMSSA_COLOR
+from configs import COMSSA_COLOR
 from objects.user_info import UserInfo
 
 
