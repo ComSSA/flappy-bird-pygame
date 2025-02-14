@@ -2,13 +2,14 @@ import time
 import pygame
 import pygame_menu
 
+from objects.constants import COMSSA_COLOR
 from objects.user_info import UserInfo
 
 
 class Leaderboard:
     def __init__(self):
         self.leaderboard = []
-        self.is_active = True
+        self.is_active = False
 
     def get_leaderboard(self):
         return self.leaderboard
@@ -33,7 +34,8 @@ class Leaderboard:
         except FileNotFoundError:
             return []
 
-    def draw_leaderboard(self, surface, score):
+    def fill_leaderboard(self, surface, score):
+        self.is_active = True
         screen_width, screen_height = pygame.display.get_surface().get_size()
 
         menu = pygame_menu.Menu("Leaderboard", screen_width * 0.7, screen_height * 0.5, theme=pygame_menu.themes.THEME_BLUE)
@@ -50,11 +52,34 @@ class Leaderboard:
         
         while self.is_active:
             # Add ComSSA color background with surface.fill
-            menu.mainloop(surface, disable_loop=True, bgfun=lambda: surface.fill((68,89,165)))
+            menu.mainloop(surface, disable_loop=True, bgfun=lambda: surface.fill(COMSSA_COLOR))
             pygame.display.flip()
 
-    def _exit_menu(self, user_info, score):
-        self.write_leaderboard_to_file(user_info, score)
+    def _exit_menu(self, user_info=None, score=None):
+        if user_info is not None and score is not None and len(user_info.student_id) > 0 and len(user_info.discord_id) > 0 and score > 0:
+            self.write_leaderboard_to_file(user_info, score)
         self.is_active = False
 
+    def draw_leaderboard(self, surface):
+        self.is_active = True
+        screen_width, screen_height = pygame.display.get_surface().get_size()
 
+        menu = pygame_menu.Menu("Top 10 Leaderboard", screen_width * 0.8, screen_height * 0.8, theme=pygame_menu.themes.THEME_BLUE)
+
+        table = menu.add.table(table_id='my_table', font_size=25)
+        table.default_cell_padding = 5
+        table.default_row_background_color = 'white'
+        table.add_row(['Student ID', 'Discord ID', 'Score'],
+                    cell_font=pygame_menu.font.FONT_OPEN_SANS_BOLD)
+        leaderboard = self.read_leaderboard_from_file()
+        if len(leaderboard) > 10:
+            leaderboard = leaderboard[:10]
+        for user_info, score in leaderboard:
+            table.add_row([user_info.student_id, user_info.discord_id, score], cell_align=pygame_menu.locals.ALIGN_CENTER)
+        
+        menu.add.vertical_margin(20)
+        menu.add.button("Exit", lambda: self._exit_menu())
+        while self.is_active:
+            # Add ComSSA color background with surface.fill
+            menu.mainloop(surface, disable_loop=True, bgfun=lambda: surface.fill(COMSSA_COLOR))
+            pygame.display.flip()

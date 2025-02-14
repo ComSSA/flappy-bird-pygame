@@ -1,3 +1,4 @@
+from objects.text import GameText
 import pygame
 
 import assets
@@ -50,6 +51,11 @@ def create_sprites():
 
 bird, game_start_message, score = create_sprites()
 
+control_text = GameText("Controls", 36, (300, configs.getGameArea().centery - 80))
+space_text = GameText("Space or Left Click to Start", 30, (300, configs.getGameArea().centery))
+leaderboard_text = GameText("Press L for Leaderboard", 30, (300, configs.getGameArea().centery + 50))
+good_luck_text = GameText("Good Luck! ^_^", 34, (300, configs.getGameArea().centery + 110))
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -62,7 +68,7 @@ while running:
                 width = configs.GAME_WIDTH
             if height < configs.GAME_HEIGHT:
                 height = configs.GAME_HEIGHT
-            # screen = pygame.display.set_mode((width,height), pygame.RESIZABLE)
+            screen = pygame.display.set_mode((width,height), pygame.RESIZABLE)
         if event.type == death_timer_event:
             gameDeathWait = False
 
@@ -76,14 +82,17 @@ while running:
                 game_start_message.kill()
                 pygame.time.set_timer(column_create_event, 1500)
             if gameover and not gameDeathWait:
-                if leaderboard.is_active:
-                    leaderboard.draw_leaderboard(screen, score.value)
-                else:
+                if not leaderboard.is_active:
+                    leaderboard.fill_leaderboard(screen, score.value)
                     gameover = False
                     gamestarted = False
                     sprites.empty()
                     bird, game_start_message, score = create_sprites()
-                    leaderboard.is_active = True
+
+        if (event.type == pygame.KEYDOWN and event.key == pygame.K_l):
+            if not gamestarted:
+                if not leaderboard.is_active:
+                    leaderboard.draw_leaderboard(screen)
 
     screen.fill(pygame.Color(68,89,165))
 
@@ -113,7 +122,10 @@ while running:
     pygame.draw.rect(screen, pygame.Color(68,89,165), pygame.Rect(configs.getGameArea().right,0, configs.getGameArea().left, configs.getGameArea().centery * 2))
     pygame.draw.rect(screen, pygame.Color(68,89,165), pygame.Rect(configs.getGameArea().left,configs.getGameArea().bottom, configs.getGameArea().width, configs.getGameArea().top))
 
-
+    control_text.draw(screen)
+    space_text.draw(screen)
+    leaderboard_text.draw(screen)
+    good_luck_text.draw(screen)
     pygame.display.flip()
     clock.tick(configs.FPS)
 
