@@ -8,9 +8,10 @@ from layer import Layer
 
 
 class Column(pygame.sprite.Sprite):
-    def __init__(self, *groups):
+    def __init__(self, *groups, score):
         self._layer = Layer.OBSTACLE
-        self.gap = 80 + random.randint(0, 50) # Add randomness to gap
+
+        self.gap = 80 + random.randint(int(max(0, 15 - score)), int(min(60, 70 - 3 * score))) # Add randomness to gap which gets harder over time, hardest at score 24
 
         self.sprite = assets.get_sprite("pipe-green")
         self.sprite_rect = self.sprite.get_rect()
