@@ -1,3 +1,4 @@
+from objects.text import GameText
 import pygame
 
 import assets
@@ -8,6 +9,7 @@ from objects.column import Column
 from objects.floor import Floor
 from objects.gameover_message import GameOverMessage
 from objects.gamestart_message import GameStartMessage
+from objects.leaderboard import Leaderboard
 from objects.score import Score
 
 pygame.init()
@@ -29,6 +31,8 @@ death_timer_event = pygame.USEREVENT + 1
 running = True
 gameover = False
 gamestarted = False
+show_leaderboard = False
+leaderboard = Leaderboard()
 
 gameDeathWait = False
 
@@ -46,6 +50,11 @@ def create_sprites():
     return Bird(sprites), GameStartMessage(sprites), Score(sprites)
 
 bird, game_start_message, score = create_sprites()
+
+control_text = GameText("Controls", 36, (configs.getGameArea().left / 2, configs.getGameArea().centery - 80))
+space_text = GameText("Space or Left Click to Start", 30, (configs.getGameArea().left / 2, configs.getGameArea().centery))
+leaderboard_text = GameText("Press L for Leaderboard", 30, (configs.getGameArea().left / 2, configs.getGameArea().centery + 50))
+good_luck_text = GameText("Good Luck! ^_^", 34, (configs.getGameArea().left / 2, configs.getGameArea().centery + 110))
 
 while running:
     for event in pygame.event.get():
@@ -73,12 +82,19 @@ while running:
                 game_start_message.kill()
                 pygame.time.set_timer(column_create_event, 1500)
             if gameover and not gameDeathWait:
-                gameover = False
-                gamestarted = False
-                sprites.empty()
-                bird, game_start_message, score = create_sprites()
+                if not leaderboard.is_active:
+                    leaderboard.fill_leaderboard(screen, score.value)
+                    gameover = False
+                    gamestarted = False
+                    sprites.empty()
+                    bird, game_start_message, score = create_sprites()
 
-    screen.fill(pygame.Color(68,89,165))
+        if (event.type == pygame.KEYDOWN and event.key == pygame.K_l):
+            if not gamestarted:
+                if not leaderboard.is_active:
+                    leaderboard.draw_leaderboard(screen)
+
+    screen.fill(configs.COMSSA_COLOR)
 
     sprites.draw(screen)
 
@@ -101,11 +117,15 @@ while running:
             assets.play_audio("point")
 
     # Draw mask
-    pygame.draw.rect(screen, pygame.Color(68,89,165), pygame.Rect(0,0, configs.getGameArea().left, configs.getGameArea().centery * 2))
-    pygame.draw.rect(screen, pygame.Color(68,89,165), pygame.Rect(configs.getGameArea().left,0, configs.getGameArea().width, configs.getGameArea().top))
-    pygame.draw.rect(screen, pygame.Color(68,89,165), pygame.Rect(configs.getGameArea().right,0, configs.getGameArea().left, configs.getGameArea().centery * 2))
-    pygame.draw.rect(screen, pygame.Color(68,89,165), pygame.Rect(configs.getGameArea().left,configs.getGameArea().bottom, configs.getGameArea().width, configs.getGameArea().top))
+    pygame.draw.rect(screen, configs.COMSSA_COLOR, pygame.Rect(0,0, configs.getGameArea().left, configs.getGameArea().centery * 2))
+    pygame.draw.rect(screen, configs.COMSSA_COLOR, pygame.Rect(configs.getGameArea().left,0, configs.getGameArea().width, configs.getGameArea().top))
+    pygame.draw.rect(screen, configs.COMSSA_COLOR, pygame.Rect(configs.getGameArea().right,0, configs.getGameArea().left, configs.getGameArea().centery * 2))
+    pygame.draw.rect(screen, configs.COMSSA_COLOR, pygame.Rect(configs.getGameArea().left,configs.getGameArea().bottom, configs.getGameArea().width, configs.getGameArea().top))
 
+    control_text.draw(screen)
+    space_text.draw(screen)
+    leaderboard_text.draw(screen)
+    good_luck_text.draw(screen)
 
     pygame.display.flip()
     clock.tick(configs.FPS)
