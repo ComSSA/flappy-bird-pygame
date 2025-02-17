@@ -61,7 +61,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == column_create_event:
-            Column(sprites)
+            Column(sprites, score=score.value)
         if event.type == pygame.VIDEORESIZE: # Resize event
             width, height = event.size
             if width < configs.GAME_WIDTH:
@@ -109,7 +109,7 @@ while running:
         assets.play_audio("hit")
         gameDeathWait = True
         print("Game ended with score of:", score.value)
-        pygame.time.set_timer(death_timer_event, 1000) # 1 second wait before allowed to replay game
+        pygame.time.set_timer(death_timer_event, 200) # 0.2 second wait before allowed to replay game
 
     for sprite in sprites:
         if type(sprite) is Column and sprite.is_passed():
