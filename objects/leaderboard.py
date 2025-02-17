@@ -8,7 +8,7 @@ from objects.user_info import UserInfo
 
 class Leaderboard:
     def __init__(self):
-        self.leaderboard = []
+        self.leaderboard = self.read_leaderboard_from_file()
         self.is_active = False
 
     def get_leaderboard(self):
@@ -30,6 +30,7 @@ class Leaderboard:
                     student_id, discord_id, score = line.split(",")
                     user_info = UserInfo(student_id, discord_id)
                     leaderboard.append((user_info, int(score)))
+                    self.leaderboard = leaderboard
                 return leaderboard
         except FileNotFoundError:
             return []
@@ -83,3 +84,9 @@ class Leaderboard:
             # Add ComSSA color background with surface.fill
             menu.mainloop(surface, disable_loop=True, bgfun=lambda: surface.fill(COMSSA_COLOR))
             pygame.display.flip()
+
+    def read_top_3_leaderboard(self):
+        # leaderboard = self.read_leaderboard_from_file()
+        if len(self.leaderboard) > 3:
+            return self.leaderboard[:3]
+        return self.leaderboard

@@ -22,3 +22,7 @@ class GameText:
         # Make sure that the text surface and text rect are setup (not needed but just in case the setup function has errors)
         if self.text_surface is not None and self.text_rect is not None:
             surface.blit(self.text_surface, self.text_rect)
+
+    def update(self, position):
+        self.text_rect = self.text_surface.get_rect()
+        self.text_rect.center = position
