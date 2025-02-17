@@ -57,7 +57,7 @@ class Leaderboard:
             pygame.display.flip()
 
     def _exit_menu(self, user_info=None, score=None):
-        if user_info is not None and score is not None and len(user_info.student_id) > 0 and len(user_info.discord_id) > 0 and score > 0:
+        if user_info is not None and score is not None and len(user_info.student_id) > 0 and score > 0:
             self.write_leaderboard_to_file(user_info, score)
         self.is_active = False
 
