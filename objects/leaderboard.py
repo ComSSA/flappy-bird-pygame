@@ -70,13 +70,13 @@ class Leaderboard:
         table = menu.add.table(table_id='my_table', font_size=25)
         table.default_cell_padding = 5
         table.default_row_background_color = 'white'
-        table.add_row(['Student ID', 'Discord ID', 'Score'],
+        table.add_row(['No.', 'Student ID', 'Discord ID', 'Score'],
                     cell_font=pygame_menu.font.FONT_OPEN_SANS_BOLD)
         leaderboard = self.read_leaderboard_from_file()
         if len(leaderboard) > 10:
             leaderboard = leaderboard[:10]
-        for user_info, score in leaderboard:
-            table.add_row([user_info.student_id, user_info.discord_id, score], cell_align=pygame_menu.locals.ALIGN_CENTER)
+        for i, (user_info, score) in enumerate(leaderboard):
+            table.add_row([i+1, user_info.student_id, user_info.discord_id, score], cell_align=pygame_menu.locals.ALIGN_CENTER)
         
         menu.add.vertical_margin(20)
         menu.add.button("Exit", lambda: self._exit_menu())
