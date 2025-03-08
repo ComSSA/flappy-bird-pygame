@@ -1,18 +1,11 @@
 # Flappy Bird Game
 
-![version](https://img.shields.io/badge/version-1.0.2-blue)
-
 This project contains a Flappy Bird game developed using the Python programming language and the Pygame game development library. In this project, reflecting the classic and entertaining game mechanics, players control a bird and navigate it through obstacles to see how long they can survive.
-
-## Play now, right now! :grinning:
-
-[https://mehmetemineker.github.io/flappy-bird/](https://mehmetemineker.github.io/flappy-bird/)
 
 ## Gameplay
 
 The player's objective is to control the bird, maneuvering it through pipes and earning the highest score possible. Players can make the bird flap upwards by pressing the spacebar on the keyboard. However, precise timing is essential to prevent the bird from falling too quickly. If the bird collides with pipes or the ground, the game ends.
 
-![screen record](gaming.gif)
 
 ## How to Play
 
@@ -21,7 +14,7 @@ The player's objective is to control the bird, maneuvering it through pipes and 
 3. Navigate to the project directory in your terminal.
 4. Start the game by using the command `python3 main.py`.
 5. Use the spacebar key on the keyboard to control the bird's upward movement.
-6. If the player collides, they can restart the game by pressing the ESC key.
+6. If the player collides, they can restart the game by pressing the spacebar key.
 
 ## Why This Project?
 
@@ -29,7 +22,19 @@ The player's objective is to control the bird, maneuvering it through pipes and 
 - An engaging and interactive way to dive into game programming.
 - A chance to practice game mechanics and using the Pygame library.
 
+## ComSSA Changes
+
+- Changed all keybinds to be space / LMB
+- Randomised gap size between pipes to increase difficulty as score increases
+- Leaderboard functionality
+- Support for a resizeable window
+- ComSSA logo & colour changes
+
 ## Contributions and Development
+
+- **mehmetemineker** - Original Fork
+- **Tttbkhn** - ComSSA 2025
+- **raph-h** - ComSSA 2025
 
 If you're interested in contributing to this project, feel free to open a pull request. We welcome suggestions for adding new features, fixing bugs, or improving the overall experience.
 
